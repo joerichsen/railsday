@@ -1,0 +1,33 @@
+<h1>Listing topics</h1>
+
+<% form_tag({}, :method => :get) do %>
+  <%= text_field_tag :minutes_ago %>
+  <%= submit_tag 'Update' %>
+<% end %>
+
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Stemmer</th>
+    <th>Description</th>
+  </tr>
+
+<% @topics.each do |topic| %>
+  <tr>
+    <td><%=h topic.title %></td>
+    <td>
+      <%= pluralize(topic.votes.count, 'vote') %>
+      <%= topic.votes.recent(@minutes_ago).count %> recently
+      <%= button_to('+1', topic_votes_path(topic)) %>
+    </td>
+    <td><%=h topic.description %></td>
+    <td><%= link_to 'Show', topic %></td>
+    <td><%= link_to 'Edit', edit_topic_path(topic) %></td>
+    <td><%= link_to 'Destroy', topic, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New topic', new_topic_path %>
